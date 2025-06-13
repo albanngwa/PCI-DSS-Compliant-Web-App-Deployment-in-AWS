@@ -42,3 +42,10 @@ module "nat_gateway" {
   private_data_subnet_az2_id = module.vpc.private_data_subnet_az2_id
 
 }
+
+# create ecs task execution role
+
+module "name" {
+  source       = "../modules/ecs-task-execution-role"
+  project_name = module.vpc.project_name
+}
