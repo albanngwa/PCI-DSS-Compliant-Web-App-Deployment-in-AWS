@@ -83,3 +83,19 @@ module "ecs" {
   ecs_security_group_id        = module.security_groups.ecs_security_group_id
   aws_lb_target_group_arn      = module.application_load_balancer.aws_lb_target_group_arn
 }
+
+# create flow-logs-iam-role
+module "flow-logs-iam-role" {
+  source       = "../modules/vpc-flow-logs-role"
+  project_name = module.vpc.project_name
+}
+
+# create vpc flog logs and cloudwatch log group
+module "cloudwatch_log_group" {
+  source                 = "../modules/cloudwatch-log-groups"
+  project_name           = module.vpc.project_name
+  retention_in_days      = var.retention_in_days
+  vpc_id                 = module.vpc.vpc_id
+  vpc_flow_logs_role_arn = module.flow-logs-iam-role.vpc_flow_logs_role_arn
+
+}
